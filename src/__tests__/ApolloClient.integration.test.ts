@@ -30,19 +30,18 @@ describe('apollo client integration test', () => {
   });
 
   describe('connect', () => {
-    it('connects to server', (done) => {
+    it('connects to server', async () => {
       const client = new SubscriptionClient(
         'ws://localhost:3002',
         {},
         WebSocket as any,
       );
 
-      client.onConnected(() => {
-        done();
-      });
+      await waitForClientToConnect(client);
+      client.close();
     });
 
-    it('disconnects unauthorized client', (done) => {
+    it('disconnects unauthorized client', async () => {
       const client = new SubscriptionClient(
         'ws://localhost:3002',
         {
@@ -51,8 +50,10 @@ describe('apollo client integration test', () => {
         WebSocket as any,
       );
 
-      client.onDisconnected(() => {
-        done();
+      await new Promise<void>((resolve) => {
+        client.onDisconnected(() => {
+          resolve();
+        });
       });
     });
   });

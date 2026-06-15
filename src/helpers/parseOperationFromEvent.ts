@@ -1,7 +1,7 @@
 import {
-  GQLClientAllEvents,
   GQLStopOperation,
   GQLConnectionInit,
+  GQLConnectionTerminate,
   isGQLConnectionInit,
   isGQLOperation,
   isGQLStopOperation,
@@ -23,14 +23,18 @@ export class InvalidOperationError extends ExtendableError {
 
 export function parseOperationFromEvent(
   event: APIGatewayWebSocketEvent,
-): GQLConnectionInit | GQLStopOperation | IdentifiedOperationRequest {
-  const operation: GQLClientAllEvents = JSON.parse(event.body);
+):
+  | GQLConnectionInit
+  | GQLConnectionTerminate
+  | GQLStopOperation
+  | IdentifiedOperationRequest {
+  const operation: unknown = JSON.parse(event.body);
 
-  if (typeof operation !== 'object' && operation !== null) {
+  if (typeof operation !== 'object' || operation === null) {
     throw new MalformedOperationError();
   }
 
-  if (operation.type == null) {
+  if (!('type' in operation) || operation.type == null) {
     throw new MalformedOperationError('Type is missing');
   }
 

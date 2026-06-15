@@ -36,14 +36,7 @@ With this library you can do:
   - [3 Deploy and development](#3-deploy-and-development)
     - [3.1 Serverless support](#31-serverless-support)
     - [3.2 Serverless-offline support](#32-serverless-offline-support)
-- [Packages](#packages)
-  - [aws-lambda-graphql package](./packages/aws-lambda-graphql)
-    - [Installation](./packages/aws-lambda-graphql#installation)
-    - [Usage](./packages/aws-lambda-graphql#usage)
-    - [API](./packages/aws-lambda-graphql#api)
-    - [Examples](./packages/aws-lambda-graphql#examples)
 - [Infrastructure](#Infrastructure)
-- [Examples](#examples)
 
 ## Quick start
 
@@ -65,7 +58,7 @@ Now we have all the dependencies installed so lets start with server implementat
 
 #### 1.1 Setting up Connection and Subscription management
 
-Our GraphQL server needs to know how to store connections and subscriptions because Lambdas are stateless. In order to do that we need create instances of the [Connection manager](./packages/aws-lambda-graphql/src/types/connections.ts) and [Subscription manager](./packages/aws-lambda-graphql/src/types/subscriptions.ts). Connections and subscriptions are stored in DynamoDB.
+Our GraphQL server needs to know how to store connections and subscriptions because Lambdas are stateless. In order to do that we need create instances of the [Connection manager](./src/types/connections.ts) and [Subscription manager](./src/types/subscriptions.ts). Connections and subscriptions are stored in DynamoDB.
 
 ```js
 import {
@@ -92,7 +85,7 @@ const connectionManager = new DynamoDBConnectionManager({
 
 #### 1.2 Setting up an Event store
 
-In order to be able to broadcast messages (publish events) we need an [Event store](./packages/aws-lambda-graphql/src/types/events.ts). Because our server can received a lot of messages we need to work with events in async, meaning that the actual events are not published directly from mutation but rather they are stored in underlying data store which works as an event source for our server. Because we decided to use DynamoDB as our persistent store, we are goint to use it as our event source.
+In order to be able to broadcast messages (publish events) we need an [Event store](./src/types/events.ts). Because our server can received a lot of messages we need to work with events in async, meaning that the actual events are not published directly from mutation but rather they are stored in underlying data store which works as an event source for our server. Because we decided to use DynamoDB as our persistent store, we are goint to use it as our event source.
 
 ```js
 import {
@@ -155,7 +148,7 @@ const typeDefs = /* GraphQL */ `
 `;
 ```
 
-From given schema we already see that we need to somehow publish and process broadcasted message. For that purpose we must create a [PubSub](./packages/aws-lambda-graphql/src/types/events.ts) instance that uses our DynamoDB event store as underlying storage for events.
+From given schema we already see that we need to somehow publish and process broadcasted message. For that purpose we must create a [PubSub](./src/types/events.ts) instance that uses our DynamoDB event store as underlying storage for events.
 
 #### 1.4 Create a PubSub instance
 
@@ -226,9 +219,9 @@ Our GraphQL schema is now finished. Now we can instantiate the server so we can 
 
 #### 1.5 Create WebSocket/HTTP event handlers and event processor handler
 
-In order to send messages to subscribed clients we need the last piece and it is a [Event processor](./packages/aws-lambda-graphql/src/types/events.ts). Event processor is responsible for processing events published to our Event store and sending them to all connections that are subscribed for given event.
+In order to send messages to subscribed clients we need the last piece and it is a [Event processor](./src/types/events.ts). Event processor is responsible for processing events published to our Event store and sending them to all connections that are subscribed for given event.
 
-Because we use DynamoDB as an event store, we are going to use [DynamoDBEventProcessor](./packages/aws-lambda-graphql/src/DynamoDBEventProcessor.ts).
+Because we use DynamoDB as an event store, we are going to use [DynamoDBEventProcessor](./src/DynamoDBEventProcessor.ts).
 
 ```js
 import {
@@ -429,21 +422,13 @@ const client = new ApolloClient({
 
 #### 3.1 Serverless support
 
-To deploy your api created using this library please see [`serverless.yml`](./packages/chat-example-server/serverless.yml) template of example app.
+To deploy your api created using this library please see [`serverless.yml`](./docs/serverless.yml) for the expected infrastructure shape.
 
 #### 3.2 Serverless-offline support
 
 This library supports [serverless-offline](https://github.com/dherault/serverless-offline). But you have to do small changes in your code to actually support it, it's not automatical.
 
-You need to set up custom endpoint for ApiGatewayManagementApi and custom endpoint for DynamoDB if you're using it. Please refer to [`chat-example-server`](./packages/chat-example-server) source code.
-
-## Packages
-
-### aws-lambda-graphql package
-
-GraphQL client and server implementation for AWS Lambda.
-
-See [package](./packages/aws-lambda-graphql)
+You need to set up custom endpoint for ApiGatewayManagementApi and custom endpoint for DynamoDB if you're using it.
 
 ## Infrastructure
 
@@ -451,18 +436,11 @@ Current infrastructure is implemented using [AWS Lambda](https://aws.amazon.com/
 
 ![](./docs/How%20it%20works.svg)
 
-## Examples
-
-- [Chat App](./packages/chat-example-app) - React app
-- [Chat Server](./packages/chat-example-server)
-  - contains AWS Lambda that handles HTTP, WebSocket and DynamoDB streams
-  - also includes `serverless.yml` file for easy deployment
-
 ## Contributing
 
 - This project uses TypeScript for static typing.
 - This projects uses conventional commits.
-- This project uses Yarn and Yarn workspaces so only `yarn.lock` is commited.
+- This project is a single TypeScript package.
 - Please add a Changelog entry under `Unreleased` section in your PR.
 
 ### Testing

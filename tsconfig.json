@@ -1,7 +1,19 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "incremental": true
+    "rootDir": "src",
+    "target": "es2018",
+    "module": "commonjs",
+    "outDir": "dist",
+    "lib": ["es2018", "esnext.asynciterable"],
+    "skipLibCheck": true
   },
-  "files": [],
-  "references": [{ "path": "./packages/aws-lambda-graphql" }]
+  "include": ["src"],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "**/__tests__/**",
+    "**/__mocks__/**",
+    "**/fixtures/**"
+  ]
 }
