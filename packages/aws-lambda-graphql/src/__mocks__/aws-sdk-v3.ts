@@ -143,17 +143,6 @@ export class TransactWriteCommand {
   }
 }
 
-// For backwards compatibility, export legacy promise mock names
-export const putPromiseMock = putMock;
-export const getPromiseMock = getMock;
-export const deletePromiseMock = deleteMock;
-export const batchWritePromiseMock = batchWriteMock;
-export const updatePromiseMock = updateMock;
-export const queryPromiseMock = queryMock;
-export const transactWritePromiseMock = transactWriteMock;
-export const postToConnectionPromiseMock = postToConnectionMock;
-export const deleteConnectionPromiseMock = deleteConnectionMock;
-
 // Reset all mocks function for convenience
 export const resetAllMocks = () => {
   [

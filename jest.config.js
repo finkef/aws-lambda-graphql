@@ -26,9 +26,9 @@ module.exports = {
     '^node:(.*)$': '$1',
     // Mock all AWS SDK v3 packages to use our mocks
     '^@aws-sdk/(.*)$':
-      '<rootDir>/packages/aws-lambda-graphql/src/__mocks__/aws-sdk.ts',
+      '<rootDir>/packages/aws-lambda-graphql/src/__mocks__/aws-sdk-v3.ts',
     '^@smithy/(.*)$':
-      '<rootDir>/packages/aws-lambda-graphql/src/__mocks__/aws-sdk.ts',
+      '<rootDir>/packages/aws-lambda-graphql/src/__mocks__/aws-sdk-v3.ts',
   },
   transformIgnorePatterns: [
     // Allow transformation of AWS SDK packages if needed

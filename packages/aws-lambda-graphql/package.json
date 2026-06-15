@@ -32,7 +32,6 @@
   "description": "Apollo server for AWS Lambda with WebSocket subscriptions support over API Gateway v1 + v2",
   "dependencies": {
     "@types/aws-lambda": "^8.10.36",
-    "@types/ioredis": "^4.16.6",
     "apollo-server-core": "^2.9.14",
     "apollo-server-lambda": "^2.9.14",
     "iterall": "^1.2.2",
@@ -44,8 +43,7 @@
     "@aws-sdk/lib-dynamodb": "^3.850.0",
     "@aws-sdk/util-dynamodb": "^3.848.0",
     "graphql": "^14.x || ^15.x",
-    "graphql-subscriptions": "^1.0.0",
-    "ioredis": "^4.17.3"
+    "graphql-subscriptions": "^1.0.0"
   },
   "engines": {
     "node": ">=10"

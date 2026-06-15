@@ -1,11 +1,9 @@
-// @ts-ignore
-import { putMock, putPromiseMock } from 'aws-sdk';
+import { putMock, resetAllMocks } from '../__mocks__/aws-sdk-v3';
 import { DynamoDBEventStore } from '../DynamoDBEventStore';
 
 describe('DynamoDBEventStore', () => {
   beforeEach(() => {
-    putMock.mockClear();
-    putPromiseMock.mockReset();
+    resetAllMocks();
   });
 
   it('works correctly', async () => {
@@ -20,7 +18,7 @@ describe('DynamoDBEventStore', () => {
       }),
     ).resolves.toBeUndefined();
 
-    expect(putPromiseMock).toHaveBeenCalledTimes(1);
+    expect(putMock).toHaveBeenCalledTimes(1);
     expect(putMock).toHaveBeenCalledWith(
       expect.objectContaining({
         TableName: 'Events',
@@ -50,7 +48,7 @@ describe('DynamoDBEventStore', () => {
       }),
     ).resolves.toBeUndefined();
 
-    expect(putPromiseMock).toHaveBeenCalledTimes(1);
+    expect(putMock).toHaveBeenCalledTimes(1);
     expect(putMock).not.toHaveBeenCalledWith(
       expect.objectContaining({
         Item: expect.objectContaining({

@@ -24,9 +24,9 @@ With this library you can do:
 ## Installation
 
 ```console
-yarn add aws-lambda-graphql graphql graphql-subscriptions
+yarn add aws-lambda-graphql graphql graphql-subscriptions @aws-sdk/client-apigatewaymanagementapi @aws-sdk/client-dynamodb @aws-sdk/lib-dynamodb @aws-sdk/util-dynamodb
 # or
-npm install aws-lamda-graphql graphql graphql-subscriptions
+npm install aws-lambda-graphql graphql graphql-subscriptions @aws-sdk/client-apigatewaymanagementapi @aws-sdk/client-dynamodb @aws-sdk/lib-dynamodb @aws-sdk/util-dynamodb
 ```
 
 ## Usage

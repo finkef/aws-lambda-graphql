@@ -66,7 +66,7 @@ export class DynamoDBEventProcessor<TServer extends Server = Server>
           continue;
         }
 
-        this.log('Processing event', event);
+        if (this.debug) this.log('Processing event', event);
 
         // iterate over subscribers that listen to this event
         // and for each connection:

@@ -1,39 +1,21 @@
 import {
-  // @ts-ignore
   batchWriteMock,
-  // @ts-ignore
-  batchWritePromiseMock,
-  // @ts-ignore
-  deletePromiseMock,
-  // @ts-ignore
-  getPromiseMock,
-  // @ts-ignore
-  putPromiseMock,
-  // @ts-ignore
-  queryPromiseMock,
-  // @ts-ignore
+  queryMock,
+  resetAllMocks,
   transactWriteMock,
-  // @ts-ignore
-  transactWritePromiseMock,
-} from 'aws-sdk';
+} from '../__mocks__/aws-sdk-v3';
 import { DynamoDBSubscriptionManager } from '../DynamoDBSubscriptionManager';
 
 describe('DynamoDBSubscriptionManager', () => {
   beforeEach(() => {
-    batchWriteMock.mockClear();
-    batchWritePromiseMock.mockReset();
-    deletePromiseMock.mockReset();
-    getPromiseMock.mockReset();
-    putPromiseMock.mockReset();
-    queryPromiseMock.mockReset();
-    transactWritePromiseMock.mockReset();
+    resetAllMocks();
   });
 
   describe('subscribersByEvent', () => {
     it('works correctly for emty query result', async () => {
       const subscriptionManager = new DynamoDBSubscriptionManager();
 
-      (queryPromiseMock as jest.Mock).mockResolvedValueOnce({ Items: [] });
+      queryMock.mockResolvedValueOnce({ Items: [] });
 
       let pages = 0;
 
@@ -46,25 +28,25 @@ describe('DynamoDBSubscriptionManager', () => {
       }
 
       expect(pages).toBe(0);
-      expect(queryPromiseMock).toHaveBeenCalledTimes(1);
+      expect(queryMock).toHaveBeenCalledTimes(1);
     });
 
     it('works correctly for non emty query result', async () => {
       const subscriptionManager = new DynamoDBSubscriptionManager();
 
-      (queryPromiseMock as jest.Mock).mockResolvedValueOnce({
+      queryMock.mockResolvedValueOnce({
         Items: [{}],
         LastEvaluatedKey: {},
       });
-      (queryPromiseMock as jest.Mock).mockResolvedValueOnce({
+      queryMock.mockResolvedValueOnce({
         Items: [{}],
         LastEvaluatedKey: {},
       });
-      (queryPromiseMock as jest.Mock).mockResolvedValueOnce({
+      queryMock.mockResolvedValueOnce({
         Items: [{}],
         LastEvaluatedKey: {},
       });
-      (queryPromiseMock as jest.Mock).mockResolvedValueOnce({ Items: [] });
+      queryMock.mockResolvedValueOnce({ Items: [] });
 
       let pages = 0;
 
@@ -77,7 +59,7 @@ describe('DynamoDBSubscriptionManager', () => {
       }
 
       expect(pages).toBe(3);
-      expect(queryPromiseMock).toHaveBeenCalledTimes(4);
+      expect(queryMock).toHaveBeenCalledTimes(4);
     });
   });
 
@@ -85,7 +67,7 @@ describe('DynamoDBSubscriptionManager', () => {
     it('subscribes correctly', async () => {
       const subscriptionManager = new DynamoDBSubscriptionManager();
 
-      (batchWritePromiseMock as jest.Mock).mockResolvedValueOnce({});
+      batchWriteMock.mockResolvedValueOnce({});
 
       await expect(
         subscriptionManager.subscribe(
@@ -95,7 +77,7 @@ describe('DynamoDBSubscriptionManager', () => {
         ),
       ).resolves.toBeUndefined();
 
-      expect(batchWritePromiseMock).toHaveBeenCalledTimes(1);
+      expect(batchWriteMock).toHaveBeenCalledTimes(1);
       expect(batchWriteMock).toHaveBeenCalledWith(
         expect.objectContaining({
           RequestItems: {
@@ -134,7 +116,7 @@ describe('DynamoDBSubscriptionManager', () => {
         ttl: false,
       });
 
-      (batchWritePromiseMock as jest.Mock).mockResolvedValueOnce({});
+      batchWriteMock.mockResolvedValueOnce({});
 
       await expect(
         subscriptionManager.subscribe(
@@ -144,7 +126,7 @@ describe('DynamoDBSubscriptionManager', () => {
         ),
       ).resolves.toBeUndefined();
 
-      expect(batchWritePromiseMock).toHaveBeenCalledTimes(1);
+      expect(batchWriteMock).toHaveBeenCalledTimes(1);
       expect(batchWriteMock).not.toHaveBeenCalledWith(
         expect.objectContaining({
           RequestItems: {
@@ -176,7 +158,7 @@ describe('DynamoDBSubscriptionManager', () => {
     it('unsubscribes correctly', async () => {
       const subscriptionManager = new DynamoDBSubscriptionManager();
 
-      (transactWritePromiseMock as jest.Mock).mockResolvedValueOnce({});
+      transactWriteMock.mockResolvedValueOnce({});
 
       await expect(
         subscriptionManager.unsubscribe({
@@ -187,7 +169,7 @@ describe('DynamoDBSubscriptionManager', () => {
         }),
       ).resolves.toBeUndefined();
 
-      expect(transactWritePromiseMock).toHaveBeenCalledTimes(1);
+      expect(transactWriteMock).toHaveBeenCalledTimes(1);
       expect((transactWriteMock as jest.Mock).mock.calls[0][0])
         .toMatchInlineSnapshot(`
         {

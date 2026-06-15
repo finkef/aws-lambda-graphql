@@ -133,7 +133,7 @@ describe('Server', () => {
 
         expect(connectionManager.registerConnection).toHaveBeenCalledTimes(1);
         expect(connectionManager.registerConnection).toHaveBeenCalledWith({
-          endpoint: 'domain/stage',
+          endpoint: 'https://domain/stage',
           connectionId: '1',
         });
       });
@@ -164,7 +164,7 @@ describe('Server', () => {
 
         expect(connectionManager.registerConnection).toHaveBeenCalledTimes(1);
         expect(connectionManager.registerConnection).toHaveBeenCalledWith({
-          endpoint: 'domain/stage',
+          endpoint: 'https://domain/stage',
           connectionId: '1',
         });
       });
@@ -1021,7 +1021,10 @@ describe('Server', () => {
           ),
         ).resolves.toEqual(
           expect.objectContaining({
-            body: '',
+            body: formatMessage({
+              id,
+              type: SERVER_EVENT_TYPES.GQL_COMPLETE,
+            }),
             statusCode: 200,
           }),
         );

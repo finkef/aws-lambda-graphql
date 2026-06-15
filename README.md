@@ -56,20 +56,16 @@ In this quick example we're going to build a simple broadcasting server that bro
 First we need to install dependencies:
 
 ```console
-yarn add aws-lambda-graphql graphql graphql-subscriptions aws-sdk
+yarn add aws-lambda-graphql graphql graphql-subscriptions @aws-sdk/client-apigatewaymanagementapi @aws-sdk/client-dynamodb @aws-sdk/lib-dynamodb @aws-sdk/util-dynamodb
 # or
-npm install aws-lambda-graphql graphql graphql-subscriptions aws-sdk
+npm install aws-lambda-graphql graphql graphql-subscriptions @aws-sdk/client-apigatewaymanagementapi @aws-sdk/client-dynamodb @aws-sdk/lib-dynamodb @aws-sdk/util-dynamodb
 ```
-
-**Note that `aws-sdk` is required only for local development, it's provided by the AWS Lambda by default when you deploy the app**
 
 Now we have all the dependencies installed so lets start with server implementation.
 
 #### 1.1 Setting up Connection and Subscription management
 
-Our GraphQL server needs to know how to store connections and subscriptions because Lambdas are stateless. In order to do that we need create instances of the [Connection manager](./packages/aws-lambda-graphql/src/types/connections.ts) and [Subscription manager](./packages/aws-lambda-graphql/src/types/subscriptions.ts). We have two options of persistent storage for our connections and subscriptions.
-
-DynamoDB:
+Our GraphQL server needs to know how to store connections and subscriptions because Lambdas are stateless. In order to do that we need create instances of the [Connection manager](./packages/aws-lambda-graphql/src/types/connections.ts) and [Subscription manager](./packages/aws-lambda-graphql/src/types/subscriptions.ts). Connections and subscriptions are stored in DynamoDB.
 
 ```js
 import {
@@ -93,29 +89,6 @@ const connectionManager = new DynamoDBConnectionManager({
 ```
 
 **⚠️ in order to clean up stale connections and subscriptions please set up TTL on `ttl` field in Connections, Subscriptions and SubscriptionOperations tables. You can turn off the TTL by setting up `ttl` option to `false` in `DynamoDBSubscriptionManager` and `DynamoDBConnectionManager`.**
-
-Redis:
-
-```js
-import {
-  RedisConnectionManager,
-  RedisSubscriptionManager,
-} from 'aws-lambda-graphql';
-import Redis from 'ioredis';
-
-const redisClient = new Redis({
-  port: 6379, // Redis port
-  host: '127.0.0.1', // Redis host
-});
-
-const subscriptionManager = new RedisSubscriptionManager({
-  redisClient,
-});
-const connectionManager = new RedisConnectionManager({
-  subscriptionManager,
-  redisClient,
-});
-```
 
 #### 1.2 Setting up an Event store
 
