@@ -1,8 +1,23 @@
 {
+  "name": "aws-lambda-graphql",
+  "version": "1.0.4",
   "private": true,
+  "main": "packages/aws-lambda-graphql/src/index.ts",
+  "types": "packages/aws-lambda-graphql/src/index.ts",
   "dependencies": {
+    "@types/aws-lambda": "^8.10.36",
+    "apollo-server-core": "^2.9.14",
+    "apollo-server-lambda": "^2.9.14",
     "graphql": "^15.5.0",
-    "graphql-subscriptions": "^1.1.0"
+    "graphql-subscriptions": "^1.1.0",
+    "iterall": "^1.2.2",
+    "ulid": "^2.3.0"
+  },
+  "peerDependencies": {
+    "@aws-sdk/client-apigatewaymanagementapi": "^3.848.0",
+    "@aws-sdk/client-dynamodb": "^3.848.0",
+    "@aws-sdk/lib-dynamodb": "^3.850.0",
+    "@aws-sdk/util-dynamodb": "^3.848.0"
   },
   "resolutions": {
     "@types/aws-lambda": "^8.10.36",
@@ -76,6 +91,5 @@
     "packages": [
       "packages/*"
     ]
-  },
-  "version": "0.0.0"
+  }
 }
